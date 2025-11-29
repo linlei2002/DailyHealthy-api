@@ -1,5 +1,6 @@
 package top.llin.dailyhealthy.service.Impl;
 
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +12,7 @@ class UserServiceImplTest {
     @Autowired
     private UserService userService;
     @Test
-    void getUser(){
+    void getUser() throws MessagingException {
         userService.getUser();
     }
 
