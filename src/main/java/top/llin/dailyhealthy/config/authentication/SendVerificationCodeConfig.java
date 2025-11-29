@@ -4,11 +4,15 @@ import com.cloopen.rest.sdk.BodyType;
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
-@Component
+/**
+ * 手机验证码发送
+ */
+@Configuration
 public class SendVerificationCodeConfig {
 
     // 模板id

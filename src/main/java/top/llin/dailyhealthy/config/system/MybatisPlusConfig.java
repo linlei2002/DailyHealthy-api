@@ -1,4 +1,4 @@
-package top.llin.dailyhealthy.config;
+package top.llin.dailyhealthy.config.system;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * MybatisPlus配置类
+ */
 @MapperScan("top.llin.dailyhealthy.mapper")
 @Configuration
 @EnableTransactionManagement
