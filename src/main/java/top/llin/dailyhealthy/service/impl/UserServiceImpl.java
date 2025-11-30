@@ -1,6 +1,7 @@
 package top.llin.dailyhealthy.service.impl;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
@@ -15,6 +16,7 @@ import top.llin.dailyhealthy.service.UserService;
 import top.llin.dailyhealthy.config.authentication.SendVerificationCodeConfig;
 import top.llin.dailyhealthy.utils.TokenUtils;
 import top.llin.dailyhealthy.utils.cache.RedisUtils;
+import top.llin.dailyhealthy.vo.UserLoginVO;
 
 @Service
 @Slf4j
@@ -24,20 +26,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final SendEmailCodeConfig sendEmailCodeConfig;
     private final RedisUtils redisUtils;
 
+    /**
+     * 登录
+     * @param userLoginVO 封装用户登录信息
+     * @return token
+     */
     @Override
-    public void getUser() throws MessagingException {
-        User user = baseMapper.selectById(1);
-        String token = TokenUtils.createToken(user.getId(), user.getUserName());
-        String codeMail = sendEmailCodeConfig.sendVerificationCode(user.getEmail());
-        log.info("验证码为: {}", codeMail);
-        redisUtils.saveVerificationCode(user.getEmail(), codeMail);
-        redisUtils.saveToken(user.getId(), token);
-        log.info("token为: {}", token);
-        DecodedJWT decodedJWT = TokenUtils.verifyToken(redisUtils.getToken(user.getId()));
-        if (decodedJWT != null) {
-            String username = decodedJWT.getClaim("username").asString();
-            String userId = decodedJWT.getClaim("userId").asString();
-            log.info("根据redis获取用户名: {}, 用户Id: {}", username, userId);
-        }
+    public String login(UserLoginVO userLoginVO) {
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getUserName, userLoginVO.getUsername())
+                    .eq(User::getPassword, userLoginVO.getPassword());
+            User user = baseMapper.selectOne(wrapper);
+            if (user != null) {
+                String token = TokenUtils.createToken(user.getId(), user.getUserName());
+                redisUtils.saveToken(user.getId(), token);
+                return token;
+            } else {
+                return "登录失败";
+            }
     }
+
 }
