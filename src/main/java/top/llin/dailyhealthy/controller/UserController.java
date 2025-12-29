@@ -1,11 +1,14 @@
 package top.llin.dailyhealthy.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import top.llin.dailyhealthy.common.result.Result;
 import top.llin.dailyhealthy.service.UserService;
-import top.llin.dailyhealthy.vo.UserLoginVO;
+import top.llin.dailyhealthy.transfer.DTO.LoginDTO;
+import top.llin.dailyhealthy.transfer.VO.UserLoginVO;
 
 /**
  * 用户控制器
@@ -16,8 +19,9 @@ import top.llin.dailyhealthy.vo.UserLoginVO;
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
-    @RequestMapping("/login")
-    public String login(UserLoginVO userLoginVO) {
-        return userService.login(userLoginVO);
+    @PostMapping("/login")
+    @Operation(summary = "用户登录")
+    public Result<UserLoginVO> login(@RequestBody @Validated LoginDTO loginDTO) {
+        return Result.ok(userService.login(loginDTO));
     }
 }

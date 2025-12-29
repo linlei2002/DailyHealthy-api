@@ -1,12 +1,12 @@
 package top.llin.dailyhealthy.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import jakarta.mail.MessagingException;
 import top.llin.dailyhealthy.entity.User;
-import top.llin.dailyhealthy.vo.UserLoginVO;
+import top.llin.dailyhealthy.transfer.DTO.LoginDTO;
+import top.llin.dailyhealthy.transfer.VO.UserLoginVO;
 
 public interface UserService extends IService<User> {
 //    void getUser() throws MessagingException;
 
-    String login(UserLoginVO userLoginVO);
+    UserLoginVO login(LoginDTO loginDTO);
 }
